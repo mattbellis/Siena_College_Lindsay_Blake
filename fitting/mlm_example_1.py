@@ -30,7 +30,7 @@ sig_width = 0.05
 signal = np.random.normal(sig_mean,sig_width,Nsig)
 
 # So here's your background data!
-Nbkg = 1000
+Nbkg = 900
 background = 9.0+(2*np.random.random(Nbkg))
 
 # Combine the background and signal, because when we run the experiment, we actually
@@ -40,17 +40,17 @@ data = np.append(data,background.copy())
 
 # Here's a very simple plot of our data.
 plt.figure()
-plt.hist(data,bins=50)#,range=(60,100))
-#plt.show()
-#exit()
+plt.hist(data,bins=50)
 
 
 ################################################################################
 # Question #1
 ################################################################################
-# Your total probability will now be composed of two separate probabilities:
-# * the probability that an event came from signal
-# * the probability that an event came from bacground
+# Your total probability *for each event* will now be composed of two separate 
+# probabilities:
+#
+# 1) the probability that an event came from signal
+# 2) the probability that an event came from bacground
 # 
 # The first part you know how to do (Gaussian). The second part is a bit more challenging, 
 # but because the background looks ``flat", it means that every value is equally likely
@@ -67,84 +67,16 @@ plt.hist(data,bins=50)#,range=(60,100))
 #
 #   P = frac*P(sig)  +  (1-frac)*P(bkg)
 #
+# Your goal is to vary the mean and width of the Gaussian *and* the fractional amount (frac)
+# of signal and background, as described above, to find the values that give you the 
+# maximum likelihood. 
+#
+# Good luck!
 
 
 # YOUR WORK HERE.
-print 'Question 1: Calculate the probabilities of obtaining these scores from a gaussian with a width of 10 and mean of 90. \n \n'
-
-my_mean = 90
-my_width = 10
-probabilities = []
-log_probabilities = []
-
-for i in range(Nstudents):
-    my_x = scores[i]
-    h = Gaussian(my_x, my_mean, my_width)
-    probabilities.append(h)
-    log_probabilities.append(math.log(h))
-    
-print (probabilities)    
-
-################################################################################
-# Question #2
-################################################################################
-# What is the product of those probabilities?
-
-# YOUR WORK HERE.
-print '\n \nQuestion 2: Taking the product of the probabilities is difficult because all the numbers are so small.  So the way to to take the product is to take the natural log and the sum all of the factors.'
-
-my_sum = sum(log_probabilities)
-print '\n \n', my_sum
-################################################################################
-# Question #3
-################################################################################
-# Vary the mean and width to find the maximum probability of measuring those
-# particular test scores.
-
-# YOUR WORK HERE.
-print '\n \nQuestion 3:  Explore the parameter space!  Very the parameters to maximise the sum of the log of the product of probabilities.'
-
-#variables to loop: x, mean, and width
-#for each new set create a list of the log of probabilities
-#then sum the probabilities, and keep track of which is GREATEST
-
-maxLogProb = -1e6
-max_width = 0
-max_mean = 0
-
-#mean can range from a score of 0 to 100
-for mean in range(101):
-    ps_probabilities = []
-    ps_mean = mean
-#width can range from a value of zero to twenty
-    for width in range(2,23):
-        ps_width = width
-#x can range from 0 to the number of students
-        for x in range(Nstudents):
-            score = scores[x]
-            logd = math.log(Gaussian(score, ps_mean, ps_width))
-            ps_probabilities.append(logd)
-            sum_probs = sum(ps_probabilities)
-            
-            if maxLogProb < sum_probs:
-                maxLogProb = sum_probs
-                max_width = width
-                max_mean = mean
-    
-print '\n \n', maxLogProb
-print max_width
-print max_mean
 
 
-x2 = np.linspace(65,95,1000)
-y2 = Gaussian(x2,max_mean,max_width)
-plt.figure()
-plt.hist(scores,bins=25)
 
-plt.figure()
-plt.plot(x2,y2)
+
 plt.show()
-
-
-
-
