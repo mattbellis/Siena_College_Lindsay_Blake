@@ -24,13 +24,14 @@ def Gaussian(x,mean,width):
 ################################################################################
 
 # So here's your signal data!
-Nsig = 100
+Nsig = 50
 sig_mean = 10.1
 sig_width = 0.05
 signal = np.random.normal(sig_mean,sig_width,Nsig)
+print signal
 
 # So here's your background data!
-Nbkg = 900
+Nbkg = 950
 background = 9.0+(2*np.random.random(Nbkg))
 
 # Combine the background and signal, because when we run the experiment, we actually
@@ -78,5 +79,54 @@ plt.hist(data,bins=50)
 
 
 
+
+prob_bkg = .5
+maxTotProb = -1e6
+
+for mysig_mean in np.arange(9.6,10.5,.1):
+    #print mysig_mean
+    for mysig_width in np.arange(.01,.1,0.01):
+        #print mysig_width
+            
+        
+        
+        for frac_bkg in np.arange(0,1,.01):
+            
+            probabilities = []
+            
+            frac_sig = 1 - frac_bkg
+            #print frac_bkg
+            #print frac_sig            
+            
+            for d in data:
+            
+                prob_sig = Gaussian(d,mysig_mean,mysig_width)
+                prob_bkg = .5
+                totPointProb= frac_bkg*prob_bkg+frac_sig*prob_sig
+                
+                logd = 0.0
+            
+                if totPointProb>0:
+                    logd = math.log(totPointProb)
+                    probabilities.append(logd)
+                
+            totProb = sum(probabilities)
+            if maxTotProb < totProb:
+                 maxTotProb = totProb
+                 maxSigWidth = mysig_width
+                 maxSigMean = mysig_mean
+                 fracbkg= frac_bkg
+                 fracsig = frac_sig   
+            
+        
+            
+        
+    
+    
+print maxTotProb
+print maxSigWidth
+print maxSigMean
+print fracbkg
+print fracsig
 
 plt.show()

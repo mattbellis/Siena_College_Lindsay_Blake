@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 import math as math
+import matplotlib.mlab as mlab
 
 ################################################################################
 # This is how we define our own function
@@ -110,15 +111,12 @@ print max_width
 print max_mean
 
 
-x2 = np.linspace(65,95,1000)
+x2 = np.linspace(60,100,1000)
 y2 = Gaussian(x2,max_mean,max_width)
 plt.figure()
 plt.hist(scores,bins=25)
 
+
 plt.figure()
 plt.plot(x2,y2)
 plt.show()
-
-
-
-
