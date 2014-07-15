@@ -31,16 +31,29 @@ sig_mean = 5.0
 sig_width = 1.0
 yvals = np.random.normal(sig_mean,sig_width,Nsig)
 
+
 # For every point in the dataset, calculate how many other points
-# are within 0.2
+# are within 0.2\\ a distance of .2 d = sqrt((x1-x2)**2 + (y1-y2)**2)
+
+def Distance(x1,y1,x2,y2):
+    dist = math.sqrt((x2-x1)**2+(y2-y1)**2)
+    return dist
 
 # The zip function is very useful!
-for x,y in zip(xvals,yvals):
-    print x,y
+zipped = zip(xvals,yvals)
+density_function2D = []
 
-#signal = signal.sort()
-#print len(signal)
-function_density = []
+
+for x1,y1 in zipped:
+    density = 0
+    for x2,y2 in zipped:
+        dist = Distance(x1,y1,x2,y2)
+        if dist < .2:
+            if dist != 0:
+                density = density +1
+    density_function2D.append(density)
+
+print density_function2D
 
 
 plt.figure()
