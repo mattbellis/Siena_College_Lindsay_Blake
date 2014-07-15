@@ -35,7 +35,8 @@ plt.figure()
 x = np.linspace(60,100,1000)
 y = Gaussian(x,fake_mean,fake_width)
 plt.plot(x,y)
-#plt.show()
+plt.show()
+#exit()
 
 
 ################################################################################
@@ -107,6 +108,7 @@ for mean in range(101):
             logd = 0.0
             if my_gauss>0:
                 logd = math.log(Gaussian(score, ps_mean, ps_width))
+                
             ps_probabilities.append(logd)
             
         ################## THIS NEEDED TO BE OUTSIDE THE STUDENT LOOP #################
