@@ -34,7 +34,7 @@ plt.figure()
 x = np.linspace(60,100,1000)
 y = Gaussian(x,fake_mean,fake_width)
 plt.plot(x,y)
-plt.show()
+#plt.show()
 
 
 ################################################################################

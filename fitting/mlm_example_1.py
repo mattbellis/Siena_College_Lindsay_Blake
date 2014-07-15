@@ -67,6 +67,7 @@ plt.hist(data,bins=50)#,range=(60,100))
 #
 #   P = frac*P(sig)  +  (1-frac)*P(bkg)
 #
+# Use this information to fit 
 
 
 # YOUR WORK HERE.
