@@ -36,9 +36,9 @@ def nn_within_radius(values0,values1,same=False,radius=1):
                 if dist < radius :
                     function_density[i] += 1
                 
-    print function_density[0:10]
+
     function_density /= (nvals1*radius)
-    print function_density[0:10]
+
     #exit()
     #function_density /= function_density.sum()
 
@@ -140,8 +140,9 @@ print "Generated the templates!"
 
 ######################################################
 print "Calculating the densities!!!"
-signal_densities = nn_within_radius(data,signal_template,False,radius=0.02)
-background_densities = nn_within_radius(data,background_template,False,radius=0.02)
+d_radius = .05
+signal_densities = nn_within_radius(data,signal_template,False,radius=d_radius)
+background_densities = nn_within_radius(data,background_template,False,radius=d_radius)
 print "Calculated the densities!!!"
 
 #print signal_densities 
