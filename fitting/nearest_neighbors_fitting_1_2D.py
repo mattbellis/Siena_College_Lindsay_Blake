@@ -19,16 +19,16 @@ background_densities = None
 # can handle up to a 10k length
 #x value and any size y value
 
-def numInRange(x, y, radius):
-    n = np.zeros_like(x)
+def numInRange(x, y, radius, npts):
     X = np.vstack((x.T))
+    n = np.zeros(npts)    
     top = 10000
     bottom = 0
     done = False
     while done == False:
-        ylength = len(y)
+        ylength = len(y.T)
         if bottom >= ylength:
-            n /= (len(y)* radius) # added to try and conform to bellis
+            n /= (ylength*radius) # added to try and conform to bellis
             return n
         elif top >= ylength:
             top = ylength
@@ -101,7 +101,7 @@ def negative_log_likelihood(frac):
     # you pass in, not maximize it.
     #
     ########################################################
-    probs = tot_prob(data,[signal_densities,background_densities],frac)
+    probs = tot_prob(data,[GarrettsigFD,GarrettbkgFD],frac)
 
     probs = probs[probs!=0]
         
@@ -136,6 +136,9 @@ data[0] = np.append(data[0],backgroundx.copy())
 data[1] = signaly.copy()
 data[1] = np.append(data[1],backgroundy.copy())
 
+data = np.array(data)
+Ndata = len(data[0])
+
 # Here's a very simple plot of our data.
 plt.figure()
 H, xedges, yedges = np.histogram2d(data[1],data[0],bins=25)
@@ -158,6 +161,7 @@ signalx = np.random.normal(sig_mean,sig_width,N)
 sig_mean = 17.0; sig_width = 1.0
 signaly = np.random.normal(sig_mean,sig_width,N)
 signal_template = [signalx.copy(),signaly.copy()]
+signal_template = np.array(signal_template)
 #print signal
 
 # So here's your background data!
@@ -165,6 +169,7 @@ N = 10000
 backgroundx = 0.0+(10*np.random.random(N))
 backgroundy = 12.0+(9*np.random.random(N))
 background_template = [backgroundx.copy(),backgroundy.copy()]
+background_template = np.array(background_template)
 
 fig_template = plt.figure(figsize=(12,6))
 fig_template.add_subplot(1,2,1)
@@ -181,17 +186,25 @@ imbkg = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], 
 
 print "Generated the templates!"
 
-plt.show()
+#plt.show()
 
 
 ######################################################
 # NEED TO MAKE EVERYTHING WORK NOW FOR 2D!!!!
 ######################################################
 print "Calculating the densities!!!"
-d_radius = .05
-GarrettsigFD = numInRange(data, signal_template,d_radius)
-GarrettbkgFD = numInRange(data, background_template, d_radius)
+d_radius = 0.5
+GarrettsigFD = numInRange(data, signal_template,d_radius,Ndata)
+GarrettbkgFD = numInRange(data, background_template, d_radius,Ndata)
 print "Calculated the densities!!!"
+
+print len(GarrettsigFD)
+print len(GarrettbkgFD)
+
+print GarrettsigFD
+print GarrettbkgFD
+
+#exit()
 
 #print signal_densities 
 #print background_densities 
@@ -207,7 +220,11 @@ print "Calculated the densities!!!"
 
 m = Minuit(negative_log_likelihood,frac=0.9,limit_frac=(0,1.0), \
                                    errordef = 0.5 )
-# This does the minimization
+
+                                   
+
+
+#This does the minimization
 m.migrad()
 
 # This calculates errors
@@ -227,4 +244,3 @@ errors = m.errors
 print errors
 
 #plt.show()
-
