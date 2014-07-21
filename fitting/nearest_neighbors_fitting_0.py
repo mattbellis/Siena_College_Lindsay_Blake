@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 import math as math
+from scipy.spatial.distance import cdist
 
 from iminuit import Minuit
 
@@ -12,6 +13,35 @@ background_template = None
 
 signal_densities = None
 background_densities = None
+
+#Takes two arrays as inputs and returns an array of
+# the number of points on y 
+# can handle up to a 10k length
+#x value and any size y value
+
+def numInRange(x, y, radius):
+    n = np.zeros_like(x)
+    X = np.vstack((x.T))
+    top = 10000
+    bottom = 0
+    done = False
+    while done == False:
+        ylength = len(y)
+        if bottom >= ylength:
+            n /= (len(y)* radius) # added to try and conform to bellis
+            return n
+        elif top >= ylength:
+            top = ylength
+        
+        temp = y[bottom:top]
+        Y = np.vstack((temp.T))
+        values = cdist(X, Y)
+        i = 0
+        for toCheck in values:
+            n[i] += len(toCheck[toCheck < radius])
+            i += 1
+        top += 10000
+        bottom += 10000
 
 ################################################################################
 # Return number of nearest neigbors within some radius. 
@@ -179,3 +209,20 @@ errors = m.errors
 print errors
 
 #plt.show()
+
+
+GarrettsigFD = numInRange(data, signal_template,d_radius)
+GarrettbkgFD = numInRange(data, background_template, d_radius)
+
+
+signal_densities = nn_within_radius(data,signal_template,False,radius=d_radius)
+background_densities = nn_within_radius(data,background_template,False,radius=d_radius)
+
+sig_diff = GarrettsigFD - signal_densities
+bkg_diff = GarrettbkgFD - background_densities
+
+diff1 = len(sig_diff[sig_diff>0.001])
+diff2 = len(bkg_diff[bkg_diff>0.001])
+
+print sig_diff[0:10]
+print bkg_diff[0:10]
