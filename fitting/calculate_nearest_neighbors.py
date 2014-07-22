@@ -33,14 +33,16 @@ signal.sort()
 #print len(signal)
 function_density = []
 
-for i in range(len(signal)):
+npts = len(signal)
+
+for i in range(npts):
     point = signal[i]
     density = 0
-    for j in range(len(signal)-1):
+    for j in range(npts):
         if i != j:
             dist = abs(point - signal[j])
             
-            if dist < .1 :
+            if dist < .05 :
                 density = density + 1
             
     function_density.append(density)
