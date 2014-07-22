@@ -136,10 +136,22 @@ data[0] = np.append(data[0],backgroundx.copy())
 data[1] = signaly.copy()
 data[1] = np.append(data[1],backgroundy.copy())
 
-data[0] = (data[0] - min(data[0]))
-data[0]= data[0]*(1/max(data[0]))
-data[1] = (data[1] - min(data[1]))
-data[1]= data[1]*(1/max(data[1]))
+minvalx = min(data[0])
+maxvalx = max(data[0])
+xwidth = maxvalx-minvalx
+
+minvaly = min(data[1])
+maxvaly = max(data[1])
+ywidth = maxvaly-minvaly
+
+data[0] = (data[0] - minvalx)/xwidth
+data[1] = (data[1] - minvaly)/ywidth
+
+plt.figure()
+plt.hist(data[0],bins=25)
+plt.figure()
+plt.hist(data[1],bins=25)
+plt.show()
 
 
 data = np.array(data)
@@ -168,10 +180,8 @@ sig_mean = 17.0; sig_width = 1.0
 signaly = np.random.normal(sig_mean,sig_width,N)
 signal_template = [signalx.copy(),signaly.copy()]
 signal_template = np.array(signal_template)
-signal_template[0] = (signal_template[0] - min(signal_template[0]))
-signal_template[0]= signal_template[0]*(1/max(signal_template[0]))
-signal_template[1] = (signal_template[1] - min(signal_template[1]))
-signal_template[1]= signal_template[1]*(1/max(signal_template[1]))
+signal_template[0] = (signal_template[0] - minvalx)/xwidth
+signal_template[1] = (signal_template[1] - minvaly)/ywidth
 
 #print signal
 
@@ -181,10 +191,12 @@ backgroundx = 0.0+(10*np.random.random(N))
 backgroundy = 12.0+(9*np.random.random(N))
 background_template = [backgroundx.copy(),backgroundy.copy()]
 background_template = np.array(background_template)
-background_template[0] = (background_template[0] - min(background_template[0]))
-background_template[0]= background_template[0]*(1/max(background_template[0]))
-background_template[1] = (background_template[1] - min(background_template[1]))
-background_template[1]= background_template[1]*(1/max(background_template[1]))
+background_template[0] = (background_template[0] - minvalx)/xwidth
+background_template[1] = (background_template[1] - minvaly)/ywidth
+#background_template[0] = (background_template[0] - min(background_template[0]))
+#background_template[0]= background_template[0]*(1/max(background_template[0]))
+#background_template[1] = (background_template[1] - min(background_template[1]))
+#background_template[1]= background_template[1]*(1/max(background_template[1]))
 
 fig_template = plt.figure(figsize=(12,6))
 fig_template.add_subplot(1,2,1)
@@ -201,6 +213,16 @@ imbkg = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], 
 
 print "Generated the templates!"
 
+plt.figure()
+plt.hist(background_template[0],bins=25)
+plt.figure()
+plt.hist(background_template[1],bins=25)
+
+plt.figure()
+plt.hist(signal_template[0],bins=25)
+plt.figure()
+plt.hist(signal_template[1],bins=25)
+
 #plt.show()
 
 
@@ -208,7 +230,7 @@ print "Generated the templates!"
 # NEED TO MAKE EVERYTHING WORK NOW FOR 2D!!!!
 ######################################################
 print "Calculating the densities!!!"
-d_radius = 0.12
+d_radius = 0.10
 GarrettsigFD = numInRange(data, signal_template,d_radius,Ndata)
 GarrettbkgFD = numInRange(data, background_template, d_radius,Ndata)
 print "Calculated the densities!!!"
