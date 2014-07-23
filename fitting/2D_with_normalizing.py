@@ -151,7 +151,7 @@ plt.figure()
 plt.hist(data[0],bins=25)
 plt.figure()
 plt.hist(data[1],bins=25)
-plt.show()
+#plt.show()
 
 
 data = np.array(data)
@@ -230,7 +230,7 @@ plt.hist(signal_template[1],bins=25)
 # NEED TO MAKE EVERYTHING WORK NOW FOR 2D!!!!
 ######################################################
 print "Calculating the densities!!!"
-d_radius = 0.10
+d_radius = 0.05
 GarrettsigFD = numInRange(data, signal_template,d_radius,Ndata)
 GarrettbkgFD = numInRange(data, background_template, d_radius,Ndata)
 print "Calculated the densities!!!"
@@ -280,4 +280,4 @@ print values
 errors = m.errors
 print errors
 
-#plt.show()
+plt.show()
