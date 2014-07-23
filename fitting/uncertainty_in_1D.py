@@ -53,7 +53,7 @@ def numInRange(x, y, radius, npts):
 ################################################################################
 # Total probability for each number/event/value.
 ################################################################################
-def tot_prob(data,densities=[],frac=0.5):
+def tot_prob(densities=[],frac=0.5):
 
     sig_densities = densities[0]
     bkg_densities = densities[1]
@@ -78,7 +78,8 @@ def negative_log_likelihood(frac):
     #
     ########################################################
 
-    probs = tot_prob(data,[GarrettsigFDY,GarrettbkgFDY],frac)
+    probs = tot_prob([GarrettsigFDY,GarrettbkgFDY],frac)
+    #probs = tot_prob([GarrettsigFDX,GarrettbkgFDX],frac)
         
     probs = probs[probs!=0]
         
@@ -131,7 +132,7 @@ plt.figure()
 plt.hist(data[0],bins=25)
 plt.figure()
 plt.hist(data[1],bins=25)
-plt.show()
+#plt.show()
 
 
 data = np.array(data)
