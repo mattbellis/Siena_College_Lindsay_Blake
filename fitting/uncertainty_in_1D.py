@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jul 23 12:13:38 2014
+
+@author: Lindsay
+"""
+
 import numpy as np
 import matplotlib.pylab as plt
 import math as math
@@ -42,38 +49,7 @@ def numInRange(x, y, radius, npts):
             i += 1
         top += 10000
         bottom += 10000
-
-################################################################################
-# Return number of nearest neigbors within some radius. 
-################################################################################
-def nn_within_radius(values0,values1,same=False,radius=1):
-
-    nvals0 = len(values0)
-    nvals1 = len(values1)
-
-    function_density = np.zeros(nvals0)
-
-    for i in range(nvals0):
-        point = values0[i]
-        for j in range(nvals1):
-            if i == j and same==True:
-                continue
-            else:
-                dist = abs(point - values1[j])
-
-                #print point, values1[j]
-                
-                if dist < radius :
-                    function_density[i] += 1
-                
-
-    function_density /= (nvals1*radius)
-
-    #exit()
-    #function_density /= function_density.sum()
-
-    return function_density
-
+        
 ################################################################################
 # Total probability for each number/event/value.
 ################################################################################
@@ -101,8 +77,9 @@ def negative_log_likelihood(frac):
     # you pass in, not maximize it.
     #
     ########################################################
-    probs = tot_prob(data,[GarrettsigFD,GarrettbkgFD],frac)
 
+    probs = tot_prob(data,[GarrettsigFDY,GarrettbkgFDY],frac)
+        
     probs = probs[probs!=0]
         
     nll = (-np.log(probs)).sum()
@@ -147,6 +124,9 @@ ywidth = maxvaly-minvaly
 data[0] = (data[0] - minvalx)/xwidth
 data[1] = (data[1] - minvaly)/ywidth
 
+Xdata = data[0]
+Ydata = data[1]
+
 plt.figure()
 plt.hist(data[0],bins=25)
 plt.figure()
@@ -157,14 +137,7 @@ plt.show()
 data = np.array(data)
 Ndata = len(data[0])
 
-# Here's a very simple plot of our data.
-plt.figure()
-H, xedges, yedges = np.histogram2d(data[1],data[0],bins=25)
-im = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
-
 print "Generated the fake experimental data!"
-
-
 
 ################################################################################
 # Generate the templates that we will use to fit the data.
@@ -183,6 +156,8 @@ signal_template = np.array(signal_template)
 signal_template[0] = (signal_template[0] - minvalx)/xwidth
 signal_template[1] = (signal_template[1] - minvaly)/ywidth
 
+sig_tempX = signal_template[0]
+sig_tempY = signal_template[1]
 
 #print signal
 
@@ -194,91 +169,42 @@ background_template = [backgroundx.copy(),backgroundy.copy()]
 background_template = np.array(background_template)
 background_template[0] = (background_template[0] - minvalx)/xwidth
 background_template[1] = (background_template[1] - minvaly)/ywidth
-#background_template[0] = (background_template[0] - min(background_template[0]))
-#background_template[0]= background_template[0]*(1/max(background_template[0]))
-#background_template[1] = (background_template[1] - min(background_template[1]))
-#background_template[1]= background_template[1]*(1/max(background_template[1]))
+
+bkg_tempX = background_template[0]
+bkg_tempY = background_template[1]
 
 fig_template = plt.figure(figsize=(12,6))
 fig_template.add_subplot(1,2,1)
 H, xedges, yedges = np.histogram2d(signal_template[1],signal_template[0],bins=25)
 imsig = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
-#plt.ylim(0,10)
-#plt.xlim(12,21)
 
 fig_template.add_subplot(1,2,2)
 H, xedges, yedges = np.histogram2d(background_template[1],background_template[0],bins=25)
 imbkg = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
-#plt.ylim(0,10)
-#plt.xlim(12,21)
 
 print "Generated the templates!"
 
-plt.figure()
-plt.hist(background_template[0],bins=25)
-plt.figure()
-plt.hist(background_template[1],bins=25)
-
-plt.figure()
-plt.hist(signal_template[0],bins=25)
-plt.figure()
-plt.hist(signal_template[1],bins=25)
-
-#plt.show()
-
-
-######################################################
-# NEED TO MAKE EVERYTHING WORK NOW FOR 2D!!!!
-######################################################
 print "Calculating the densities!!!"
 d_radius = 0.05
-GarrettsigFD = numInRange(data, signal_template,d_radius,Ndata)
-GarrettbkgFD = numInRange(data, background_template, d_radius,Ndata)
+GarrettsigFDX = numInRange(Xdata, sig_tempX,d_radius,Ndata)
+GarrettbkgFDX = numInRange(Xdata, bkg_tempX, d_radius,Ndata)
+
+GarrettsigFDY = numInRange(Ydata, sig_tempY,d_radius,Ndata)
+GarrettbkgFDY = numInRange(Ydata, bkg_tempY, d_radius,Ndata)
 print "Calculated the densities!!!"
-
-print len(GarrettsigFD)
-print len(GarrettbkgFD)
-
-print GarrettsigFD
-print GarrettbkgFD
-
-#exit()
-
-#print signal_densities 
-#print background_densities 
-#exit()
-################################################################################
-# Set up Minuit!
-################################################################################
-
-# First we have to initialize Minuit. You tell it the function you minimize,
-# the names and starting values of your parameters (the things you will vary)
-# and then the range of those values. For instance, frac should never be less
-# than 0 or greater than 1, because it's a fraction.
 
 m = Minuit(negative_log_likelihood,frac=0.9,limit_frac=(0,1.0), \
                                    errordef = 0.5 )
-
                                    
-
-
-#This does the minimization
 m.migrad()
 
-# This calculates errors
 m.hesse()
 
-# There's different ways to get the final value of the 
-# negative log likelihood.
 print 'fval', m.fval
 print m.get_fmin()
 
-# Here the final fit values! Should you need them.
 values = m.values
 print values
 
-# Here the final fit errors! Should you need them.
 errors = m.errors
 print errors
-
-#plt.show()
