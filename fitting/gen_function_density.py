@@ -23,10 +23,13 @@ def numInRange(x, y, radius, npts):
             return n
         elif top >= ylength:
             top = ylength
-        
-        temp = y[bottom:top]
+        if(len(y) > 1):
+            yPrime = y.T
+            temp = np.array(yPrime[bottom:top], copy = True)
+            temp = temp.T
+        else:
+            temp =np.array( y[bottom:top], copy = True)
         Y = np.vstack((temp.T))
-        values = cdist(X, Y)
         i = 0
         for toCheck in values:
             n[i] += len(toCheck[toCheck < radius])
