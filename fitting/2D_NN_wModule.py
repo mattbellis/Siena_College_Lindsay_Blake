@@ -16,7 +16,7 @@ from iminuit import Minuit
 ################################################################################
 
 # arguments to put into the generating function
-Ntemplates = 10000
+Ntemplates = 100000
 Nsig = 100
 sig_mean1 = 5.0
 sig_width1 = 0.5
