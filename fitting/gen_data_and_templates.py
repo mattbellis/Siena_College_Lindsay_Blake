@@ -47,12 +47,16 @@ def sig_ngauss_bkg_flat(sigmean,sigwidth,Nsig,bkglo,bkghi,Nbkg,Ntemplates,verbos
     bkg_template = np.array(bkg_template)
     
     if scale:
-        minvalx = min(data[0])
-        maxvalx = max(data[0])
+        #minvalx = min(data[0])
+        #maxvalx = max(data[0])
+        minvalx = bkglo[0]
+        maxvalx = bkghi[0]
         xwidth = maxvalx-minvalx
 
-        minvaly = min(data[1])
-        maxvaly = max(data[1])
+        #minvaly = min(data[1])
+        #maxvaly = max(data[1])
+        minvaly = bkglo[1]
+        maxvaly = bkghi[1]
         ywidth = maxvaly-minvaly 
         
         data[0] = (data[0] - minvalx)/xwidth

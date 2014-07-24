@@ -119,14 +119,14 @@ print "Generating the fake experimental data!"
 Nsig = 100
 sig_mean = 5.0; sig_width = 0.5
 signalx = np.random.normal(sig_mean,sig_width,Nsig)
-sig_mean = 17.0; sig_width = 1.0
+sig_mean = 15.0; sig_width = 0.5
 signaly = np.random.normal(sig_mean,sig_width,Nsig)
 #print signal
 
 # So here's your background data!
 Nbkg = 900
 backgroundx = 0.0+(10*np.random.random(Nbkg))
-backgroundy = 12.0+(9*np.random.random(Nbkg))
+backgroundy = 10.0+(10*np.random.random(Nbkg))
 
 # Combine the background and signal, because when we run the experiment, we actually
 # don't know which is which!
@@ -176,7 +176,7 @@ print "Generating the templates!"
 N = 10000
 sig_mean = 5.0; sig_width = 0.5
 signalx = np.random.normal(sig_mean,sig_width,N)
-sig_mean = 17.0; sig_width = 1.0
+sig_mean = 15.0; sig_width = 0.5
 signaly = np.random.normal(sig_mean,sig_width,N)
 signal_template = [signalx.copy(),signaly.copy()]
 signal_template = np.array(signal_template)
@@ -189,7 +189,7 @@ signal_template[1] = (signal_template[1] - minvaly)/ywidth
 # So here's your background data!
 N = 10000
 backgroundx = 0.0+(10*np.random.random(N))
-backgroundy = 12.0+(9*np.random.random(N))
+backgroundy = 10.0+(10*np.random.random(N))
 background_template = [backgroundx.copy(),backgroundy.copy()]
 background_template = np.array(background_template)
 background_template[0] = (background_template[0] - minvalx)/xwidth
@@ -281,4 +281,6 @@ print values
 errors = m.errors
 print errors
 
-plt.show()
+print "FINAL VAL",values
+
+#plt.show()
