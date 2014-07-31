@@ -31,7 +31,7 @@ bkglo2 = 10
 bkghi2 = 20
 
 # actually generating data and templates
-data, sig_template, bkg_template = genD.sig_ngauss_bkg_flat([sig_mean1, sig_mean2],[sig_width1, sig_width2],Nsig,[bkglo1, bkglo2],[bkghi1,bkghi2],Nbkg,Ntemplates,verbose=False,scale=True)
+data, sig_template, bkg_template = genD.sig_2corrgauss_bkg_flat([sig_mean1, sig_mean2],[sig_width1, sig_width2],Nsig,0.9,[bkglo1, bkglo2],[bkghi1,bkghi2],Nbkg,Ntemplates,verbose=False,scale=True)
 
 ################################################################################
 # Generate the function densities wtih Garrett's code in 
