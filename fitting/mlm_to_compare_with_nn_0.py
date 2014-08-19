@@ -127,4 +127,7 @@ print values
 errors = m.errors
 print errors
 
-plt.show()
+print "FINAL VALS: %f %f" % (values['frac'],errors['frac'])
+
+
+#plt.show()
