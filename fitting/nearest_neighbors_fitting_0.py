@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import math as math
 from scipy.spatial.distance import cdist
+import scipy.stats as stats
 
 from iminuit import Minuit
 
@@ -117,6 +118,8 @@ print "Generating the fake experimental data!"
 
 # Here's your signal data!
 Nsig = 100
+Nsig = stats.poisson(Nsig).rvs(1)[0]
+
 sig_mean = 10.1
 sig_width = 0.05
 signal = np.random.normal(sig_mean,sig_width,Nsig)
@@ -124,7 +127,10 @@ signal = np.random.normal(sig_mean,sig_width,Nsig)
 
 # So here's your background data!
 Nbkg = 900
+Nbkg = stats.poisson(Nbkg).rvs(1)[0]
 background = 9.0+(2*np.random.random(Nbkg))
+
+true_frac = Nbkg/float(Nsig+Nbkg)
 
 # Combine the background and signal, because when we run the experiment, we actually
 # don't know which is which!
@@ -146,15 +152,14 @@ print "Generated the fake experimental data!"
 print "Generating the templates!"
 
 # Here's your signal template!
-Nsig = 10000
+Ntemplates = 10000
 sig_mean = 10.1
 sig_width = 0.05
-signal_template = np.random.normal(sig_mean,sig_width,Nsig)
+signal_template = np.random.normal(sig_mean,sig_width,Ntemplates)
 #print signal_template
 
 # So here's your background data!
-Nbkg = 10000
-background_template = 9.0+(2*np.random.random(Nbkg))
+background_template = 9.0+(2*np.random.random(Ntemplates))
 
 fig_template = plt.figure(figsize=(12,6))
 fig_template.add_subplot(1,2,1)
@@ -210,5 +215,9 @@ print values
 # Here the final fit errors! Should you need them.
 errors = m.errors
 print errors
+
+print "FIT VALS: %f %f\t\tTRUE VAL: %f" % (values['frac'],errors['frac'],true_frac)
+print Nsig
+print Nbkg
 
 #plt.show()

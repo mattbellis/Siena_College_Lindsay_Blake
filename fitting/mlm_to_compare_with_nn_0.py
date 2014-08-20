@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pylab as plt
 import math as math
+import scipy.stats as stats
+
 
 from iminuit import Minuit
 
@@ -76,6 +78,8 @@ def negative_log_likelihood(mean,width,frac):
 
 # Here's your signal data!
 Nsig = 100
+Nsig = stats.poisson(Nsig).rvs(1)[0]
+
 sig_mean = 10.1
 sig_width = 0.05
 signal = np.random.normal(sig_mean,sig_width,Nsig)
@@ -83,7 +87,10 @@ signal = np.random.normal(sig_mean,sig_width,Nsig)
 
 # So here's your background data!
 Nbkg = 900
+Nbkg = stats.poisson(Nbkg).rvs(1)[0]
 background = 9.0+(2*np.random.random(Nbkg))
+
+true_frac = Nbkg/float(Nsig+Nbkg)
 
 # Combine the background and signal, because when we run the experiment, we actually
 # don't know which is which!
@@ -113,6 +120,9 @@ m.migrad()
 
 # This calculates errors
 m.hesse()
+eh = m.errors['frac']
+m.minos()
+em = m.get_merrors()['frac']
 
 # There's different ways to get the final value of the 
 # negative log likelihood.
@@ -127,7 +137,16 @@ print values
 errors = m.errors
 print errors
 
-print "FINAL VALS: %f %f" % (values['frac'],errors['frac'])
+if values['frac']<=true_frac:
+    print "FIT VALS: %f %f\t\tTRUE VAL: %f" % (values['frac'],em['upper'],true_frac)
+else:
+    print "FIT VALS: %f %f\t\tTRUE VAL: %f" % (values['frac'],em['lower'],true_frac)
+
+#print "FIT VALS: %f %f\t\tTRUE VAL: %f" % (values['frac'],errors['frac'],true_frac)
+print Nsig
+print Nbkg
+
+print eh,em
 
 
 #plt.show()
