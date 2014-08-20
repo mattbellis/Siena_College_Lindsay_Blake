@@ -36,12 +36,20 @@ Nfrac = len(fracs)
 frac_mean = .9
 frac_width = 0.01377
 
+print "Fracs:"
+print np.mean(fracs)
+print np.std(fracs)
+
+print "Errors:"
 print np.mean(errors)
 print np.std(errors)
 
 #pulls = abs(fracs-true_fracs)/(errors/1.4)
 #pulls = abs(fracs-0.9)/(errors/1.0)
 pulls = (fracs-0.9)/(errors/1.0)
+
+print "Pulls:"
+print np.mean(pulls)
 print np.std(pulls)
 
 plt.figure()
