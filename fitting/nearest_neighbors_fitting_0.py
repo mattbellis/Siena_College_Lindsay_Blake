@@ -175,7 +175,7 @@ print "Generated the templates!"
 
 ######################################################
 print "Calculating the densities!!!"
-d_radius = .05
+d_radius = .01
 #signal_densities = nn_within_radius(data,signal_template,False,radius=d_radius)
 #background_densities = nn_within_radius(data,background_template,False,radius=d_radius)
 

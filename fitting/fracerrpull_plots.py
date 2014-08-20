@@ -5,7 +5,8 @@ import matplotlib.pylab as plt
 #infilename = "output_1k.dat"
 #infilename = "output_1k_both_pois.dat"
 #infilename = "output_1k_both_pois_minos.dat"
-infilename = "output_1k_nn_0.dat"
+#infilename = "output_1k_nn_0.dat"
+infilename = "output_1k_nn_0_r01.dat"
 infile = open(infilename)
 
 fracs =[]
