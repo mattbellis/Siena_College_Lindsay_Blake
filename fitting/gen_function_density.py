@@ -31,9 +31,9 @@ def numInRange(x, y, radius, npts):
             temp =np.array( y[bottom:top], copy = True)
         temp = y[bottom:top]
         Y = np.vstack((temp.T))
-        print "here"
-        print X
-        print Y
+        #print "here"
+        #print X
+        #print Y
         values = cdist(X, Y)
         i = 0
         for toCheck in values:
