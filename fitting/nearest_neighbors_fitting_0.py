@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import math as math
 from scipy.spatial.distance import cdist
+import scipy.stats as stats
 
 from iminuit import Minuit
 
@@ -117,6 +118,8 @@ print "Generating the fake experimental data!"
 
 # Here's your signal data!
 Nsig = 100
+Nsig = stats.poisson(Nsig).rvs(1)[0]
+
 sig_mean = 10.1
 sig_width = 0.05
 signal = np.random.normal(sig_mean,sig_width,Nsig)
@@ -124,7 +127,10 @@ signal = np.random.normal(sig_mean,sig_width,Nsig)
 
 # So here's your background data!
 Nbkg = 900
+Nbkg = stats.poisson(Nbkg).rvs(1)[0]
 background = 9.0+(2*np.random.random(Nbkg))
+
+true_frac = Nbkg/float(Nsig+Nbkg)
 
 # Combine the background and signal, because when we run the experiment, we actually
 # don't know which is which!
@@ -133,7 +139,7 @@ data = np.append(data,background.copy())
 
 # Here's a very simple plot of our data.
 plt.figure()
-plt.hist(data,bins=50)
+plt.hist(data,bins=20)
 
 print "Generated the fake experimental data!"
 
@@ -146,23 +152,22 @@ print "Generated the fake experimental data!"
 print "Generating the templates!"
 
 # Here's your signal template!
-Nsig = 10000
+Ntemplates = 10000
 sig_mean = 10.1
 sig_width = 0.05
-signal_template = np.random.normal(sig_mean,sig_width,Nsig)
+signal_template = np.random.normal(sig_mean,sig_width,Ntemplates)
 #print signal_template
 
 # So here's your background data!
-Nbkg = 10000
-background_template = 9.0+(2*np.random.random(Nbkg))
+background_template = 9.0+(2*np.random.random(Ntemplates))
 
 fig_template = plt.figure(figsize=(12,6))
 fig_template.add_subplot(1,2,1)
-plt.hist(signal_template,bins=100,range=(9,11))
+plt.hist(signal_template,bins=20,range=(9,11))
 plt.xlim(9,11)
 
 fig_template.add_subplot(1,2,2)
-plt.hist(background_template,bins=100,range=(9,11))
+plt.hist(background_template,bins=20,range=(9,11))
 plt.xlim(9,11)
 
 print "Generated the templates!"
@@ -170,7 +175,7 @@ print "Generated the templates!"
 
 ######################################################
 print "Calculating the densities!!!"
-d_radius = .05
+d_radius = .01
 #signal_densities = nn_within_radius(data,signal_template,False,radius=d_radius)
 #background_densities = nn_within_radius(data,background_template,False,radius=d_radius)
 
@@ -178,8 +183,12 @@ signal_densities = numInRange(data, signal_template,d_radius)
 background_densities = numInRange(data, background_template, d_radius)
 print "Calculated the densities!!!"
 
-#print signal_densities 
-#print background_densities 
+print signal_densities 
+print background_densities
+
+print np.log(signal_densities) 
+print np.log(background_densities) 
+
 #exit()
 ################################################################################
 # Set up Minuit!
@@ -210,5 +219,9 @@ print values
 # Here the final fit errors! Should you need them.
 errors = m.errors
 print errors
+
+print "FIT VALS: %f %f\t\tTRUE VAL: %f" % (values['frac'],errors['frac'],true_frac)
+print Nsig
+print Nbkg
 
 #plt.show()

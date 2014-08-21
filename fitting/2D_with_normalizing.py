@@ -224,7 +224,7 @@ plt.hist(signal_template[0],bins=25)
 plt.figure()
 plt.hist(signal_template[1],bins=25)
 
-#plt.show()
+plt.show()
 
 
 ######################################################

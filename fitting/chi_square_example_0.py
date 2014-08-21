@@ -102,7 +102,6 @@ chisquare = sum(sumDat)
 print chisquare
 
 print "2.) Plot Overlay"
-
 x = np.linspace(1,20,20)
 exp_slope = -0.3
 mu = (200*np.exp(x*exp_slope)).astype('int')

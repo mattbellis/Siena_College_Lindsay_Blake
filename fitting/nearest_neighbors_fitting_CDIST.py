@@ -146,7 +146,7 @@ print "Generated the fake experimental data!"
 print "Generating the templates!"
 
 # Here's your signal template!
-Nsig = 100000
+Nsig = 10000
 sig_mean = 10.1
 sig_width = 0.05
 signal_template = np.random.normal(sig_mean,sig_width,Nsig)
