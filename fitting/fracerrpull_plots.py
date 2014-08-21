@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pylab as plt
 
-infilename = "output_of_tests.dat"
+infilename = "output_of_tests_1k.dat"
 infile = open(infilename)
 
 fracs =[]
