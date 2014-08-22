@@ -33,6 +33,7 @@ bkglo2 = 10
 bkghi2 = 20
 
 #Ntemplates = Nsig + Nbkg
+#Ntemplates = 9900
 Ntemplates = 9900
 
 true_frac = Nbkg/float(Nsig+Nbkg)
@@ -50,21 +51,21 @@ d_radius = 0.05
 Ndata = len(data[0])
 
 # generating the signal and background function densities
-print data
-print len(data)
-print len(data[0])
-print len(data[1])
-print sig_template
-print len(sig_template)
-print len(sig_template[0])
-print len(sig_template[1])
+#print data
+#print len(data)
+#print len(data[0])
+#print len(data[1])
+#print sig_template
+#print len(sig_template)
+#print len(sig_template[0])
+#print len(sig_template[1])
 sigFD = genFD.numInRange(data, sig_template,d_radius,Ndata)
 bkgFD = genFD.numInRange(data, bkg_template, d_radius,Ndata)
 
-print sigFD
-print bkgFD
-print np.log(sigFD)
-print np.log(bkgFD)
+#print sigFD
+#print bkgFD
+#print np.log(sigFD)
+#print np.log(bkgFD)
 
 ################################################################################
 # Total probability for each number/event/value.

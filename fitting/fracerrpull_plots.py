@@ -19,10 +19,11 @@ fracs =[]
 errors = []
 true_fracs =[]
 for line in infile:
-    vals = line.split()
-    fracs.append(float(vals[2]))
-    errors.append(float(vals[3]))
-    true_fracs.append(float(vals[6]))
+    if line.find('core')<0:
+        vals = line.split()
+        fracs.append(float(vals[2]))
+        errors.append(float(vals[3]))
+        true_fracs.append(float(vals[6]))
 
 print errors[0:10]
 print fracs[0:10]
@@ -58,6 +59,7 @@ print np.mean(pulls)
 print np.std(pulls)
 
 #fraction plot
+plt.figure(figsize=(6,9),dpi=100)
 plt.subplot(3,1,1)
 plt.title('Fraction Plot')
 
