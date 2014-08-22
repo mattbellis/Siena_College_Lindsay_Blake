@@ -10,8 +10,9 @@ import matplotlib.pylab as plt
 #infilename = "output_nn_0_r05.dat"
 #infilename = "output_mlm_0.dat"
 #infilename = "output_nn_0_r01.dat"
-infilename = "output_2Dnn_0_r05.dat"
+#infilename = "output_2Dnn_0_r05.dat"
 #infilename = "false_output_2Dnn_0_r025.dat"
+infilename = "output_2D_mlm.dat"
 infile = open(infilename)
 
 fracs =[]
