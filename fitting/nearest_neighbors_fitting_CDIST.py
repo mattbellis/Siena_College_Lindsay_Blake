@@ -211,4 +211,5 @@ print values
 errors = m.errors
 print errors
 
-#plt.show()
+
+plt.show()
