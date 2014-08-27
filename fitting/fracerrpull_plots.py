@@ -12,7 +12,12 @@ import matplotlib.pylab as plt
 #infilename = "output_nn_0_r01.dat"
 #infilename = "output_2Dnn_0_r05.dat"
 #infilename = "false_output_2Dnn_0_r025.dat"
-infilename = "output_2D_mlm.dat"
+#infilename = "output_2D_mlm.dat"
+#infilename = "output_2D_varyradius.dat"
+#infilename = "output_varyradius_k30.dat"
+#infilename = "output_varyradius_k10.dat"
+infilename = "output_varyradius_k50.dat"
+#infilename = "output_varyradius_k100.dat"
 infile = open(infilename)
 
 fracs =[]

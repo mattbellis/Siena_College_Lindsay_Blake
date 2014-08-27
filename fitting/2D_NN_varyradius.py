@@ -48,7 +48,7 @@ data, sig_template, bkg_template = genD.sig_ngauss_bkg_flat([sig_mean1, sig_mean
 ################################################################################
 
 # arguments for Garrett's numInRange function
-k = 20
+k = 100
 Ndata = len(data[0])
 unSphere = math.pi
 
