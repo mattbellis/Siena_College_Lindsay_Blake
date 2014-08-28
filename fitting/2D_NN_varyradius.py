@@ -13,6 +13,8 @@ import scipy.stats as stats
 import math as math
 from iminuit import Minuit
 
+import sys
+
 ################################################################################
 # Generate the templates and data from Bellis' module.
 ################################################################################
@@ -20,6 +22,9 @@ from iminuit import Minuit
 # arguments to put into the generating function
 
 Nsig = 100
+if len(sys.argv)>=2:
+    Nsig = int(sys.argv[1])
+
 Nsig = stats.poisson(Nsig).rvs(1)[0]
 sig_mean1 = 5.0
 sig_width1 = 0.5
@@ -27,6 +32,8 @@ sig_mean2 = 15.0
 sig_width2 = 1.0
 
 Nbkg = 900
+if len(sys.argv)>=3:
+    Nbkg = int(sys.argv[2])
 Nbkg = stats.poisson(Nbkg).rvs(1)[0]
 bkglo1 = 0
 bkghi1 = 10
@@ -35,7 +42,7 @@ bkghi2 = 20
 
 #Ntemplates = Nsig + Nbkg
 #Ntemplates = 9900
-Ntemplates = 9900
+Ntemplates = 100000
 
 true_frac = Nbkg/float(Nsig+Nbkg)
 
@@ -47,22 +54,26 @@ data, sig_template, bkg_template = genD.sig_ngauss_bkg_flat([sig_mean1, sig_mean
 # Lindsay's module.
 ################################################################################
 
-# arguments for Garrett's numInRange function
-k = 100
+# arguments for Lindsay's radiusToK function
+k = 20
+
 Ndata = len(data[0])
 unSphere = math.pi
 
 # generating the signal and background function densities
 
-presigFD = genRD.radiusToK(data, sig_template,k,Ndata)
-prebkgFD = genRD.radiusToK(data, bkg_template, k,Ndata)
-sigFD = np.zeros(Ndata)
-bkgFD = np.zeros(Ndata)
+presigFD = genRD.radiusToK(data, sig_template,k)
+prebkgFD = genRD.radiusToK(data, bkg_template,k)
+#sigFD = np.zeros(Ndata)
+#bkgFD = np.zeros(Ndata)
+sigFD = k/(Ntemplates*unSphere*(presigFD**2))
+bkgFD = k/(Ntemplates*unSphere*(prebkgFD**2))
+'''
 for i,R in enumerate(presigFD):
-    sigFD[i] = k/(Ndata*unSphere*R**2)
+    sigFD[i] = k/(Ntemplates*unSphere*(R**2))
 for i,R in enumerate(prebkgFD):
-    bkgFD[i] = k/(Ndata*unSphere*R**2)
-    
+    bkgFD[i] = k/(Ntemplates*unSphere*(R**2))
+'''    
 
 ################################################################################
 # Total probability for each number/event/value.
@@ -158,6 +169,37 @@ H, xedges, yedges = np.histogram2d(bkg_template[1],bkg_template[0],bins=50,range
 imbkg = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
 #plt.ylim(0,10)
 #plt.xlim(12,21)
+
+fig_template = plt.figure(figsize=(12,6))
+fig_template.add_subplot(1,2,1)
+plt.scatter(data[0],data[1],s=sigFD*50,alpha=0.1)
+plt.xlim(0,1)
+plt.ylim(0,1)
+fig_template.add_subplot(1,2,2)
+plt.scatter(data[0],data[1],s=bkgFD*50,alpha=0.1)
+plt.xlim(0,1)
+plt.ylim(0,1)
+
+fig_template = plt.figure(figsize=(12,6))
+fig_template.add_subplot(1,2,1)
+plt.scatter(data[0],data[1],s=presigFD,alpha=0.9)
+plt.xlim(0,1)
+plt.ylim(0,1)
+fig_template.add_subplot(1,2,2)
+plt.scatter(data[0],data[1],s=prebkgFD,alpha=0.9)
+plt.xlim(0,1)
+plt.ylim(0,1)
+
+
+
+#xpts = np.random.random(3)
+#ypts = np.random.random(3)
+#size = [1,20,30]
+#print xpts
+#print ypts
+#print size
+#plt.scatter(xpts,ypts,s=size)
+
 
 #print 'SIGFD:'
 #print sigFD

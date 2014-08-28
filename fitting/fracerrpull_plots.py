@@ -16,9 +16,15 @@ import matplotlib.pylab as plt
 #infilename = "output_2D_varyradius.dat"
 #infilename = "output_varyradius_k30.dat"
 #infilename = "output_varyradius_k10.dat"
-infilename = "output_varyradius_k50.dat"
+#infilename = "output_varyradius_k20_new.dat"
+#infilename = "output_varyradius_k50.dat"
 #infilename = "output_varyradius_k100.dat"
+infilename = "output_varyradius_k20_90_nT100k.dat"
+#infilename = "output_varyradius_k20_80.dat"
+#infilename = "output_varyradius_k20_70.dat"
+
 infile = open(infilename)
+frac0 = .9
 
 fracs =[]
 errors = []
@@ -57,7 +63,7 @@ print np.std(errors)
 
 #pulls = abs(fracs-true_fracs)/(errors/1.4)
 #pulls = abs(fracs-0.9)/(errors/1.0)
-pulls = (fracs-0.90)/(errors/1.0)
+pulls = (fracs-frac0)/(errors/1.0)
 
 print "Pulls:"
 print np.mean(pulls)
@@ -70,12 +76,12 @@ plt.title('Fraction Plot')
 
 nbins = 50
 Nfrac = len(fracs)
-lo = 0.85
-hi = 0.95
+lo = frac0-.05
+hi = frac0+.05
 xF = np.linspace(lo,hi,Nfrac)
 binwidth = (hi-lo)/float(nbins)
 
-frac_mean = .9
+frac_mean = frac0
 frac_width = .005
 #frac_width = 0.013
 fracGauss = Gaussian(xF,frac_mean,frac_width)
