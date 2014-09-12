@@ -12,6 +12,7 @@ import matplotlib.pylab as plt
 import scipy.stats as stats
 import math as math
 from iminuit import Minuit
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import sys
 
@@ -152,43 +153,80 @@ print Nbkg
 print eh,em
 print "FINAL VAL: ",values['frac']
 
-plt.figure()
+
 H, xedges, yedges = np.histogram2d(data[1],data[0],bins=25)
 im = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
 
-fig_template = plt.figure(figsize=(12,6))
+fig_template = plt.figure(figsize=(15,6))
 fig_template.add_subplot(1,2,1)
+plt.xlabel('Signal Dataset #1')
+plt.ylabel('Signal Dataset #2')
+plt.title('2D Signal Frequency', fontsize=14)
 H, xedges, yedges = np.histogram2d(sig_template[1],sig_template[0],bins=50,range=[[0,1],[0,1]])
 imsig = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
-#imsig = plt.imshow(H, interpolation='nearest', origin='low', extent=[0, 1.0, 0.0, 1.0])
+imsig = plt.imshow(H, interpolation='nearest', origin='low', extent=[0, 1.0, 0.0, 1.0])
+ax = plt.gca()
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="5%", pad=0.05)
+cbar = plt.colorbar(cax=cax)
+cbar.ax.set_ylabel('Frequency')
 #plt.ylim(0,10)
 #plt.xlim(12,21)
 
 fig_template.add_subplot(1,2,2)
+plt.xlabel('Background Dataset #1')
+plt.ylabel('Background Dataset #2')
+plt.title('2D Background Frequency', fontsize=14)
 H, xedges, yedges = np.histogram2d(bkg_template[1],bkg_template[0],bins=50,range=[[0,1],[0,1]])
 imbkg = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
+ax = plt.gca()
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="5%", pad=0.05)
+cbar = plt.colorbar(cax=cax)
+cbar.ax.set_ylabel('Frequency')
+plt.savefig('2D_Histograms.png')
 #plt.ylim(0,10)
 #plt.xlim(12,21)
 
+txt = 'Figure A: The location of a sphere in both radius density plots indidcates the location of a data point for the background and signal datasets.  \nThe radius of the sphere indicates the neighbor density of the particular datapoint.  Note how the radii of the background points are \ngenerally the same and the points are scattered throughout the plot in the signal plot the points are concentrated in the center and those \nclosest to the center have the largest radii indicated that they have the largest neighbor densities in the center of the plot.'
 fig_template = plt.figure(figsize=(12,6))
 fig_template.add_subplot(1,2,1)
+plt.figtext(.5, -.01,txt, horizontalalignment='center',verticalalignment='center')
 plt.scatter(data[0],data[1],s=sigFD*50,alpha=0.1)
 plt.xlim(0,1)
 plt.ylim(0,1)
+
+plt.xlabel('Signal Dataset #1')
+plt.ylabel('Signal Dataset #2')
+plt.title('Signal Function Density', fontsize=14)
 fig_template.add_subplot(1,2,2)
 plt.scatter(data[0],data[1],s=bkgFD*50,alpha=0.1)
 plt.xlim(0,1)
 plt.ylim(0,1)
+plt.xlabel('Background Dataset 1')
+plt.ylabel('Background Dataset 2')
+plt.title('Background Function Density', fontsize=14)
+plt.savefig('bubble_plots.png')
 
+
+txt = 'Figure B: The radius of this plot idicates how large a circle around a datapoint was needed to enclose 20 neighbors around a data point. \nNote how at the center of the signal plot there appears to be no spheres.  This is because the radii to enclose 20 neighbors at the center \nof the plot are so small it makes the shperes difficult to see.'   
 fig_template = plt.figure(figsize=(12,6))
 fig_template.add_subplot(1,2,1)
+plt.figtext(.5, 0,txt, horizontalalignment='center',verticalalignment='center')
+plt.xlabel('Signal Dataset #1')
+plt.ylabel('Signal Dataset #2')
+plt.title('Signal Radius Density', fontsize=14)
 plt.scatter(data[0],data[1],s=presigFD,alpha=0.9)
 plt.xlim(0,1)
 plt.ylim(0,1)
 fig_template.add_subplot(1,2,2)
+plt.xlabel('Signal Dataset #1')
+plt.ylabel('Signal Dataset #2')
+plt.title('Background Radius Density', fontsize=14)
 plt.scatter(data[0],data[1],s=prebkgFD,alpha=0.9)
 plt.xlim(0,1)
 plt.ylim(0,1)
+plt.savefig('inverse_bubble_plots.png')
 
 
 

@@ -40,7 +40,7 @@ def radiusToK(x, y, k):
         elif top >= ylength:
             top = ylength
 
-        print bottom,top
+        #print bottom,top
 
         if(len(y) > 1):
             yPrime = y.T
