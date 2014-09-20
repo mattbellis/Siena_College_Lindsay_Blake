@@ -154,8 +154,40 @@ print eh,em
 print "FINAL VAL: ",values['frac']
 
 
+# 1D PLOTS
+nbins = 40
+
+fig_template = plt.figure(figsize=(12,6))
+fig_template.add_subplot(1,2,1)
+plt.xlabel('Scaled Magnitude')
+plt.ylabel('Frequency')
+plt.title('Dataset X', fontsize=14)
+plt.hist(data[1],bins=nbins)
+
+fig_template.add_subplot(1,2,2)
+plt.xlabel('Scaled Magnitude')
+plt.ylabel('Frequency')
+plt.title('Dataset Y', fontsize=14)
+plt.hist(data[0],bins=nbins)
+plt.savefig('1D_Data_Histograms.png')
+
+# 2D PLOTS
+plt.figure(figsize=(12,6))
+plt.xlabel('Dataset X')
+plt.ylabel('Dataset Y')
+plt.title('2D Data Frequency', fontsize=14)
 H, xedges, yedges = np.histogram2d(data[1],data[0],bins=25)
 im = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
+imsig = plt.imshow(H, interpolation='nearest', origin='low', extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
+imsig = plt.imshow(H, interpolation='nearest', origin='low', extent=[0, 1.0, 0.0, 1.0])
+ax = plt.gca()
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="5%", pad=0.05)
+cbar = plt.colorbar(cax=cax)
+cbar.ax.set_ylabel('Frequency')
+plt.savefig('2D_Data_Histogram.png')
+
+
 
 fig_template = plt.figure(figsize=(15,6))
 fig_template.add_subplot(1,2,1)
