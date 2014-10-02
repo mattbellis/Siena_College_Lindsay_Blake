@@ -1,10 +1,13 @@
-import closestNeighborGPU as genRD
+import gen_function_density as genRD
+#import cdist_calc_distances_Garrett as genRD
+import closestNeighborGPU as genRD_GPU
 import gen_data_and_templates as genD
 import scipy.stats as stats
 import numpy as np
 from numba import cuda
 import numba
 import math
+from time import time
 
 np.random.seed(1)
 
@@ -23,7 +26,7 @@ bkghi1 = 10
 bkglo2 = 10
 bkghi2 = 20
 
-Ntemplates = 100000
+Ntemplates = 1000000
 
 true_frac = Nbkg/float(Nsig+Nbkg)
 
@@ -41,12 +44,12 @@ ans = np.zeros(npts, dtype = np.float32)
 #print ans
 #print npts
 
-print "here"
-print len(data[0])
-print data[0][0:10]
-print data[1][0:10]
-print len(sig_template[0])
-print sig_template[0]
+#print "here"
+#print len(data[0])
+#print data[0][0:10]
+#print data[1][0:10]
+#print len(sig_template[0])
+#print sig_template[0]
 
 radius = 0.01 #change the accepted radius here
 thread_ct = my_gpu.WARP_SIZE
@@ -56,12 +59,20 @@ block_ct = int(math.ceil(float(npts) / thread_ct))
 #sig_template[0] = np.float32(sig_template[0])
 #sig_template[1] = np.float32(sig_template[1])
 
+start = time()
+genRD_GPU.compute[block_ct, thread_ct](np.float32(data[0]), np.float32(data[1]), np.float32(sig_template[0]), np.float32(sig_template[1]), ans, radius)
+print "GPU:  %f" % (time()-start)
 
-genRD.compute[block_ct, thread_ct](np.float32(data[0]), np.float32(data[1]), np.float32(sig_template[0]), np.float32(sig_template[1]), ans, radius)
-
-#ans -= 1 #Since each element counts itself
 print ans[0:10]
 print len(ans)
+
+
+start = time()
+presigFD = genRD.numInRange(data, sig_template,radius,len(data[0]))
+#presigFD = genRD.numInRange(data, sig_template,radius)
+print "cdist:  %f" % (time()-start)
+print presigFD[0:10]
+print len(presigFD[0:10])
 
 
 

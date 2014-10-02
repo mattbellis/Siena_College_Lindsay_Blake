@@ -1,6 +1,10 @@
-import gen_radius_density as genRD
+#import gen_radius_density as genRD
+import gen_function_density as genRD
 import gen_data_and_templates as genD
 import scipy.stats as stats
+import numpy as np
+
+np.random.seed(1)
 
 Nsig = 100
 
@@ -25,7 +29,11 @@ true_frac = Nbkg/float(Nsig+Nbkg)
 data, sig_template, bkg_template = genD.sig_ngauss_bkg_flat([sig_mean1, sig_mean2],[sig_width1, sig_width2],Nsig,[bkglo1, bkglo2],[bkghi1,bkghi2],Nbkg,Ntemplates,verbose=False,scale=True)
 
 k=20
-presigFD = genRD.radiusToK(data, sig_template,k)
-prebkgFD = genRD.radiusToK(data, bkg_template,k)
+radius = 0.01
+
+presigFD = genRD.numInRange(data, sig_template,radius,len(data[0]))
+print presigFD[0:10]
+#prebkgFD = genRD.numInRange(data, bkg_template,radius,len(data[0]))
+#print prebkgFD[0:10]
 
 

@@ -44,6 +44,7 @@ def compute(arr_ax, arr_ay, arr_bx, arr_by, arr_out, k):
             #arr_out[i] = distance
             arr_out[i] += 1
         #'''
+    arr_out[i] /= (k*narr_b)
 
 
 

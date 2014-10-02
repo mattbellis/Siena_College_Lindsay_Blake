@@ -18,22 +18,26 @@ def numInRange(x, y, radius, npts):
     done = False
     while done == False:
         ylength = len(y.T)
+        #print "ylength: ",ylength
         if bottom >= ylength:
             n /= (ylength*radius) # added to try and conform to bellis
             return n
         elif top >= ylength:
             top = ylength
+
         if(len(y) > 1):
+            #print "HERE!!!!"
             yPrime = y.T
             temp = np.array(yPrime[bottom:top], copy = True)
             temp = temp.T
         else:
             temp =np.array( y[bottom:top], copy = True)
-        temp = y[bottom:top]
+        #temp = y[bottom:top]
         Y = np.vstack((temp.T))
         #print "here"
         #print X
         #print Y
+        #print len(X),len(Y)
         values = cdist(X, Y)
         i = 0
         for toCheck in values:
